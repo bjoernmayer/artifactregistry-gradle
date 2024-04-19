@@ -1,4 +1,4 @@
-package com.github.bjoernmayer.artifactregistrygradle
+package io.github.bjoernmayer.artifactregistrygradle
 
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException

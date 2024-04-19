@@ -1,4 +1,4 @@
-package com.github.bjoernmayer.artifactregistrygradle
+package io.github.bjoernmayer.artifactregistrygradle
 
 import com.google.auth.oauth2.AccessToken
 import org.gradle.api.credentials.PasswordCredentials

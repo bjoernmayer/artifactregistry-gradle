@@ -1,4 +1,4 @@
-package com.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier
+package io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier
 
 import com.google.auth.oauth2.GoogleCredentials
 import org.slf4j.Logger

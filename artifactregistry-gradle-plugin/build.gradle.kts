@@ -24,7 +24,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
 }
 
-group = "com.github.bjoernmayer"
+group = "io.github.bjoernmayer"
 version = "0.1"
 
 gradlePlugin {
@@ -32,8 +32,8 @@ gradlePlugin {
     vcsUrl = "https://github.com/bjoernmayer/artifactregistry-gradle"
 
     val artifactregistryGradlePlugin by plugins.creating {
-        id = "com.github.bjoernmayer.artifactregistryGradlePlugin"
-        implementationClass = "com.github.bjoernmayer.artifactregistrygradle.ArtifactRegistryGradlePlugin"
+        id = "io.github.bjoernmayer.artifactregistryGradlePlugin"
+        implementationClass = "io.github.bjoernmayer.artifactregistrygradle.ArtifactRegistryGradlePlugin"
 
         displayName = "ArtifactRegistry Gradle Plugin"
         description = "Automatically handle authentication with Maven repositories hosted on Artifact Registry."
