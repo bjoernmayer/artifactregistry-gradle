@@ -34,9 +34,6 @@ internal class GCloudSDK(
         } catch (e: IOException) {
             logger.info("Failed to retrieve credentials from gcloud: " + e.message)
             null
-        } catch (e: ExecException) {
-            logger.info("Failed to retrieve credentials from gcloud: " + e.message)
-            null
         }
     }
 
@@ -73,13 +70,17 @@ internal class GCloudSDK(
 
         override fun get(): AccessToken {
             val execOutput =
-                providerFactory.exec {
-                    it.commandLine(
-                        gCloudCommand,
-                        "config",
-                        "config-helper",
-                        "--format=json(credential)",
-                    )
+                try {
+                    providerFactory.exec {
+                        it.commandLine(
+                            gCloudCommand,
+                            "config",
+                            "config-helper",
+                            "--format=json(credential)",
+                        )
+                    }
+                } catch (e: ExecException) {
+                    throw IOException(e)
                 }
 
             val exitCode = execOutput.result.get().exitValue
