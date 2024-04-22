@@ -1,8 +1,8 @@
 package io.github.bjoernmayer.artifactregistrygradle
 
+import com.google.auth.oauth2.GoogleCredentials
 import io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier.ApplicationDefault
 import io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier.GCloudSDK
-import com.google.auth.oauth2.GoogleCredentials
 import org.gradle.api.provider.ProviderFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
