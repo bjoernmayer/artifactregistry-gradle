@@ -28,7 +28,7 @@ dependencies {
 }
 
 group = "io.github.bjoernmayer"
-version = "0.1.1"
+version = "0.1.2"
 
 gradlePlugin {
     website = "https://github.com/bjoernmayer/artifactregistry-gradle"
