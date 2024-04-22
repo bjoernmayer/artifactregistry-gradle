@@ -69,18 +69,19 @@ internal class GCloudSDK(
         }
 
         override fun get(): AccessToken {
-            val execOutput = try {
-                providerFactory.exec {
-                    it.commandLine(
-                        gCloudCommand,
-                        "config",
-                        "config-helper",
-                        "--format=json(credential)",
-                    )
+            val execOutput =
+                try {
+                    providerFactory.exec {
+                        it.commandLine(
+                            gCloudCommand,
+                            "config",
+                            "config-helper",
+                            "--format=json(credential)",
+                        )
+                    }
+                } catch (e: ExecException) {
+                    throw IOException(e)
                 }
-            } catch (e: ExecException) {
-                throw IOException(e)
-            }
 
             val exitCode = execOutput.result.get().exitValue
             val stdOut = execOutput.standardOutput.asText.get()
