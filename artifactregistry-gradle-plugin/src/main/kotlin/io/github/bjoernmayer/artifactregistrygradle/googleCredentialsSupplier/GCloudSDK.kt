@@ -7,6 +7,7 @@ import com.google.api.client.util.GenericData
 import com.google.auth.oauth2.AccessToken
 import com.google.auth.oauth2.GoogleCredentials
 import org.gradle.api.provider.ProviderFactory
+import org.gradle.process.internal.ExecException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.IOException
@@ -31,6 +32,9 @@ internal class GCloudSDK(
                 logger.info("Using credentials retrieved from gcloud.")
             }
         } catch (e: IOException) {
+            logger.info("Failed to retrieve credentials from gcloud: " + e.message)
+            null
+        } catch (e: ExecException) {
             logger.info("Failed to retrieve credentials from gcloud: " + e.message)
             null
         }
