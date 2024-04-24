@@ -7,7 +7,7 @@ and more up to date.
 
 ## Usage
 ```kts
-id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "0.1.2"
+id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "0.1.3"
 ```
 
 ## Authentication
