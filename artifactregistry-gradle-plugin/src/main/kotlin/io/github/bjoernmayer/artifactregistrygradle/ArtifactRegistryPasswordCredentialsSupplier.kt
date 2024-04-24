@@ -19,8 +19,8 @@ import kotlin.time.toJavaDuration
 internal class ArtifactRegistryPasswordCredentialsSupplier(
     providerFactory: ProviderFactory,
 ) : Supplier<ArtifactRegistryPasswordCredentials?> {
-    private val googleCredentialsSuppliers: Set<Supplier<GoogleCredentials?>> by lazy {
-        setOf(
+    private val googleCredentialsSuppliers: List<Supplier<GoogleCredentials?>> by lazy {
+        listOf(
             ApplicationDefault,
             GCloudSDK(providerFactory),
         )
