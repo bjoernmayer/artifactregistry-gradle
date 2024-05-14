@@ -2,16 +2,14 @@
 
 This repository contains a Gradle plugin to help with interacting with Maven repositories hosted on Artifact Registry.
 
-It is basically a copy of [Artifact Registry Maven Tools](https://github.com/GoogleCloudPlatform/artifact-registry-maven-tools) but only for Gradle
-and more up to date.
+It is basically a copy of [Artifact Registry Maven Tools](https://github.com/GoogleCloudPlatform/artifact-registry-maven-tools) but only for Gradle and more up to date.
 
 ## Usage
 ```kts
-id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "0.1.3"
+id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "0.2.0"
 ```
 
 ## Authentication
-
 Requests to Artifact Registry will be authenticated using credentials from the environment. The
 tools described below search the environment for credentials in the following order:
 1. [Google Application Default Credentials](https://developers.google.com/accounts/docs/application-default-credentials).
