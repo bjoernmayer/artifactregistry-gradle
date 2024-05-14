@@ -1,5 +1,7 @@
 package io.github.bjoernmayer.artifactregistrygradle
 
+import io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier.ApplicationDefault
+import io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier.GCloudSDK
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.credentials.PasswordCredentials
@@ -12,7 +14,12 @@ import org.slf4j.LoggerFactory
 class ArtifactRegistryGradlePlugin : Plugin<Any> {
     private lateinit var providerFactory: ProviderFactory
     private val artifactRegistryPasswordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier by lazy {
-        ArtifactRegistryPasswordCredentialsSupplier(providerFactory)
+        ArtifactRegistryPasswordCredentialsSupplier(
+            listOf(
+                ApplicationDefault,
+                GCloudSDK(providerFactory),
+            ),
+        )
     }
 
     override fun apply(target: Any) {
