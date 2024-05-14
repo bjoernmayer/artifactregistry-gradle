@@ -109,13 +109,18 @@ internal class GCloudSDK(
 
             val expiry =
                 try {
-                    dateFormat.parse(credential[KEY_TOKEN_EXPIRY] as String)
+                    dateFormat.parse(credential[KEY_TOKEN_EXPIRY] as? String)
                 } catch (e: ParseException) {
                     throw IOException("Failed to parse timestamp from gcloud output", e)
                 }
 
+            val tokenValue: String =
+                credential[KEY_ACCESS_TOKEN] as? String ?: throw IOException(
+                    "Invalid JSON Format. AccessToken was not of type string",
+                )
+
             return AccessToken(
-                credential[KEY_ACCESS_TOKEN] as String,
+                tokenValue,
                 expiry,
             ).validate()
         }
