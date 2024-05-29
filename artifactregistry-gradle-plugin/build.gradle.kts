@@ -20,8 +20,11 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")    // https://mvnrepository.com/artifact/com.google.auth/google-auth-library-oauth2-http
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0") // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+    // https://mvnrepository.com/artifact/com.google.auth/google-auth-library-oauth2-http
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
     testImplementation("io.mockk:mockk:1.13.10")
