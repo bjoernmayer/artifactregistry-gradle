@@ -37,12 +37,7 @@ internal class GCloudSDK(
         }
     }
 
-    internal class Credentials internal constructor(private val supplier: Supplier<AccessToken>) : GoogleCredentials(
-        newBuilder()
-            .apply {
-                this.accessToken = supplier.get()
-            },
-    ) {
+    internal class Credentials internal constructor(private val supplier: Supplier<AccessToken>) : GoogleCredentials(supplier.get()) {
         override fun refreshAccessToken(): AccessToken {
             logger.info("Refreshing gcloud credentials...")
 
