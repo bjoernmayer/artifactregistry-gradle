@@ -20,15 +20,24 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")    // https://mvnrepository.com/artifact/com.google.auth/google-auth-library-oauth2-http
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0") // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
     testImplementation("io.mockk:mockk:1.13.10")
 }
 
+// Make sure to use guava jre
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "com.google.guava" && requested.version?.contains("-android") == true) {
+            useVersion(requested.version!!.replace("-android", "-jre"))
+        }
+    }
+}
+
 group = "io.github.bjoernmayer"
-version = "0.2.0"
+version = "0.2.1"
 
 gradlePlugin {
     website = "https://github.com/bjoernmayer/artifactregistry-gradle"
