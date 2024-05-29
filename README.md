@@ -1,5 +1,7 @@
 # Artifact Registry Gradle
 
+[![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v?label=Plugin%20Portal&metadataUrl=https%3A%2F%2Fplugins.gradle.org%2Fm2%2Fio%2Fgithub%2Fbjoernmayer%2FartifactregistryGradlePlugin%2Fio.github.bjoernmayer.artifactregistryGradlePlugin.gradle.plugin%2Fmaven-metadata.xml)](https://plugins.gradle.org/plugin/io.github.bjoernmayer.artifactregistryGradlePlugin)
+
 This repository contains a Gradle plugin to help with interacting with Maven repositories hosted on Artifact Registry.
 
 It is basically a copy of [Artifact Registry Maven Tools](https://github.com/GoogleCloudPlatform/artifact-registry-maven-tools) but only for Gradle and more up to date.
@@ -11,7 +13,7 @@ Apply the plugin:
 - In `settings.gradle.kts` for multi module projects
 
 ```kts
-id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "0.2.1"
+id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "<VERSION>"
 ```
 
 ## Authentication
