@@ -21,7 +21,7 @@ repositories {
 dependencies {
     implementation(gradleApi())
     // https://mvnrepository.com/artifact/com.google.auth/google-auth-library-oauth2-http
-    implementation("com.google.auth:google-auth-library-oauth2-http:1.1.0")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.23.0")
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-kotlin
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
