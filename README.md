@@ -16,6 +16,17 @@ Apply the plugin:
 id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "<VERSION>"
 ```
 
+### Using with Jib in a multi module project
+If you see weird errors like `NoSuchMethod`, you might need to pin down the guava version for your buildscript:
+```kts
+// root settings.gradle.kts
+buildscript {
+    dependencies {
+        classpath("com.google.guava:guava:33.2.0-jre")
+    }
+}
+```
+
 ## Authentication
 
 Requests to Artifact Registry will be authenticated using credentials from the environment. The
