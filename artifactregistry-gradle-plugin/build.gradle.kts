@@ -40,7 +40,7 @@ configurations.all {
 }
 
 group = "io.github.bjoernmayer"
-version = "0.2.1"
+version = "0.2.2"
 
 gradlePlugin {
     website = "https://github.com/bjoernmayer/artifactregistry-gradle"
