@@ -16,7 +16,7 @@ class ArtifactRegistryGradlePlugin : Plugin<Any> {
     private val artifactRegistryPasswordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier by lazy {
         ArtifactRegistryPasswordCredentialsSupplier(
             listOf(
-                ApplicationDefault,
+                ApplicationDefault(providerFactory),
                 GCloudSDK(providerFactory),
             ),
         )

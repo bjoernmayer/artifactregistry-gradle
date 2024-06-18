@@ -1,12 +1,15 @@
 package io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier
 
 import com.google.auth.oauth2.GoogleCredentials
+import org.gradle.api.provider.ProviderFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.util.function.Supplier
 
-internal object ApplicationDefault : Supplier<GoogleCredentials?> {
+class ApplicationDefault(private val providerFactory: ProviderFactory) : Supplier<GoogleCredentials?> {
     private val logger: Logger = LoggerFactory.getLogger(ApplicationDefault::class.java)
 
     private val scopes =
@@ -19,8 +22,11 @@ internal object ApplicationDefault : Supplier<GoogleCredentials?> {
         logger.debug("Trying Application Default Credentials...")
 
         return try {
+            val credentialsPath = providerFactory.environmentVariable(APPLICATION_CREDENTIALS_ENV_VAR_NAME).get()
+            val credentialsInputStream = FileInputStream(File(credentialsPath))
+
             GoogleCredentials
-                .getApplicationDefault()
+                .fromStream(credentialsInputStream)
                 .createScoped(*scopes)
                 .also { logger.info("Using Application Default Credentials.") }
         } catch (e: IOException) {
@@ -29,5 +35,9 @@ internal object ApplicationDefault : Supplier<GoogleCredentials?> {
 
             null
         }
+    }
+
+    companion object {
+        private const val APPLICATION_CREDENTIALS_ENV_VAR_NAME = "GOOGLE_APPLICATION_CREDENTIALS"
     }
 }
