@@ -23,8 +23,12 @@ class ApplicationDefault(private val providerFactory: ProviderFactory) : Supplie
 
         return try {
             val credentialsPath =
-                providerFactory.environmentVariable(APPLICATION_CREDENTIALS_ENV_VAR_NAME).orNull?.takeIf { it.isNotBlank() }
+                providerFactory
+                    .environmentVariable(APPLICATION_CREDENTIALS_ENV_VAR_NAME)
+                    .orNull
+                    ?.takeIf { it.isNotBlank() }
                     ?: throw IOException("GOOGLE_APPLICATION_CREDENTIALS Env Var not set or empty")
+
             val credentialsInputStream = FileInputStream(File(credentialsPath))
 
             GoogleCredentials

@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier
 
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -17,18 +19,16 @@ import java.util.Date
 import java.util.TimeZone
 import java.util.function.Supplier
 
-internal class GCloudSDK(
-    providerFactory: ProviderFactory,
-) : Supplier<GoogleCredentials?> {
-    private val accessTokenSuppier by lazy {
-        AccessTokenSuppier(providerFactory)
+internal class GCloudSDK(providerFactory: ProviderFactory) : Supplier<GoogleCredentials?> {
+    private val accessTokenSupplier by lazy {
+        AccessTokenSupplier(providerFactory)
     }
 
     override fun get(): Credentials? {
         logger.debug("Trying gcloud credentials...")
 
         return try {
-            Credentials(accessTokenSuppier).also {
+            Credentials(accessTokenSupplier).also {
                 logger.info("Using credentials retrieved from gcloud.")
             }
         } catch (e: IOException) {
@@ -54,11 +54,11 @@ internal class GCloudSDK(
         }
     }
 
-    private class AccessTokenSuppier(
+    private class AccessTokenSupplier(
         private val providerFactory: ProviderFactory,
     ) : Supplier<AccessToken> {
         private val gCloudCommand =
-            if (System.getProperty("os.name").startsWith("Windows")) {
+            if (providerFactory.systemProperty("os.name").orNull?.startsWith("Windows") == true) {
                 "gcloud.cmd"
             } else {
                 "gcloud"
@@ -80,6 +80,9 @@ internal class GCloudSDK(
                         )
                     }
                 } catch (e: ExecException) {
+                    throw IOException(e)
+                } catch (e: Exception) {
+                    logger.debug("Caught exception", e)
                     throw IOException(e)
                 }
 
