@@ -41,7 +41,7 @@ public open class ArtifactRegistryGradleExtension internal constructor(
     ) : CredentialsSupplierExtension(objectFactory) {
         override val order: Property<Byte> =
             objectFactory.property<Byte> {
-                set(55)
+                set(1)
             }
     }
 
