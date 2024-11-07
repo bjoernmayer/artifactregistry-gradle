@@ -4,7 +4,7 @@
 
 This repository contains a Gradle plugin to help with interacting with Maven repositories hosted on Artifact Registry.
 
-It is basically a copy of [Artifact Registry Maven Tools](https://github.com/GoogleCloudPlatform/artifact-registry-maven-tools) but only for Gradle and more up to date.
+It used to be a copy of [Artifact Registry Maven Tools](https://github.com/GoogleCloudPlatform/artifact-registry-maven-tools) but only for Gradle and more up to date.
 
 ## Usage
 
@@ -17,6 +17,7 @@ id("io.github.bjoernmayer.artifactregistryGradlePlugin") version "<VERSION>"
 ```
 
 ### Using with Jib in a multi module project
+
 If you see weird errors like `NoSuchMethod`, you might need to pin down the guava version for your buildscript:
 ```kts
 // root settings.gradle.kts
@@ -30,8 +31,25 @@ buildscript {
 ## Authentication
 
 Requests to Artifact Registry will be authenticated using credentials from the environment. The
-tools described below search the environment for credentials in the following order:
+plugin searches the environment for credentials in the following order (default):
 1. [Google Application Default Credentials](https://developers.google.com/accounts/docs/application-default-credentials).
     * Note: It is possible to set Application Default Credentials for a user account via `gcloud auth login --update-adc` or `gcloud auth application-default login`
 1. From the `gcloud` SDK. (i.e., the access token printed via `gcloud config config-helper --format='value(credential.access_token)'`)
     * Hint: You can see which account is active with the command `gcloud config config-helper --format='value(configuration.properties.core.account)'`
+
+### Configuration
+
+You can change this order or disable providers like this:
+```kts
+artifactRegistry {
+    applicationDefault {
+        // enable.set(false) // default true
+        order.set(2) // default 1
+    }
+
+    gCloudSDK {
+        // enable.set(false) // default true
+        order.set(1) // default 2
+    }
+}
+```
