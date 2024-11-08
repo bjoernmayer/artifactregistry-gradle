@@ -10,13 +10,9 @@ internal class ArtifactRegistryPasswordCredentials(
 
     override fun getUsername(): String = username
 
-    override fun setUsername(userName: String?) {
-        throw NotImplementedError()
-    }
+    override fun setUsername(userName: String?): Unit = throw NotImplementedError()
 
     override fun getPassword(): String = accessToken.tokenValue
 
-    override fun setPassword(password: String?) {
-        throw NotImplementedError()
-    }
+    override fun setPassword(password: String?): Unit = throw NotImplementedError()
 }

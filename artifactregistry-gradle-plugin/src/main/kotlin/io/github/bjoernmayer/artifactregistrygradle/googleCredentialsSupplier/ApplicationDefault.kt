@@ -9,7 +9,9 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.util.function.Supplier
 
-class ApplicationDefault(private val providerFactory: ProviderFactory) : Supplier<GoogleCredentials?> {
+internal class ApplicationDefault(
+    private val providerFactory: ProviderFactory,
+) : Supplier<GoogleCredentials?> {
     private val logger: Logger = LoggerFactory.getLogger(ApplicationDefault::class.java)
 
     private val scopes =
@@ -43,7 +45,7 @@ class ApplicationDefault(private val providerFactory: ProviderFactory) : Supplie
         }
     }
 
-    companion object {
-        private const val APPLICATION_CREDENTIALS_ENV_VAR_NAME = "GOOGLE_APPLICATION_CREDENTIALS"
+    private companion object {
+        const val APPLICATION_CREDENTIALS_ENV_VAR_NAME = "GOOGLE_APPLICATION_CREDENTIALS"
     }
 }

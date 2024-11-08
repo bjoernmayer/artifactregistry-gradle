@@ -19,7 +19,9 @@ import java.util.Date
 import java.util.TimeZone
 import java.util.function.Supplier
 
-internal class GCloudSDK(providerFactory: ProviderFactory) : Supplier<GoogleCredentials?> {
+internal class GCloudSDK(
+    providerFactory: ProviderFactory,
+) : Supplier<GoogleCredentials?> {
     private val accessTokenSupplier by lazy {
         AccessTokenSupplier(providerFactory)
     }
@@ -37,12 +39,14 @@ internal class GCloudSDK(providerFactory: ProviderFactory) : Supplier<GoogleCred
         }
     }
 
-    internal class Credentials internal constructor(private val supplier: Supplier<AccessToken>) : GoogleCredentials(
-        newBuilder()
-            .apply {
-                this.accessToken = supplier.get()
-            },
-    ) {
+    internal class Credentials internal constructor(
+        private val supplier: Supplier<AccessToken>,
+    ) : GoogleCredentials(
+            newBuilder()
+                .apply {
+                    this.accessToken = supplier.get()
+                },
+        ) {
         override fun refreshAccessToken(): AccessToken {
             logger.info("Refreshing gcloud credentials...")
 
@@ -155,7 +159,7 @@ internal class GCloudSDK(providerFactory: ProviderFactory) : Supplier<GoogleCred
         }
     }
 
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(GCloudSDK::class.java)
+    private companion object {
+        val logger: Logger = LoggerFactory.getLogger(GCloudSDK::class.java)
     }
 }

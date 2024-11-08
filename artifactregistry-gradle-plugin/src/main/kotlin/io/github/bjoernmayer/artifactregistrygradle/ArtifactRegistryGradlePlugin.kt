@@ -4,75 +4,65 @@ import io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier.Ap
 import io.github.bjoernmayer.artifactregistrygradle.googleCredentialsSupplier.GCloudSDK
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.initialization.Settings
 import org.gradle.api.invocation.Gradle
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.ProviderFactory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
-class ArtifactRegistryGradlePlugin : Plugin<Any> {
-    private lateinit var providerFactory: ProviderFactory
-    private val artifactRegistryPasswordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier by lazy {
-        ArtifactRegistryPasswordCredentialsSupplier(
-            listOf(
-                ApplicationDefault(providerFactory),
-                GCloudSDK(providerFactory),
-            ),
-        )
-    }
+public class ArtifactRegistryGradlePlugin
+    @javax.inject.Inject
+    constructor(
+        private val objectFactory: ObjectFactory,
+        private val providerFactory: ProviderFactory,
+    ) : Plugin<ExtensionAware> {
+        private lateinit var extension: ArtifactRegistryGradleExtension
 
-    override fun apply(target: Any) {
-        providerFactory =
-            when (target) {
-                is Project -> {
-                    target.providers
-                }
+        override fun apply(target: ExtensionAware) {
+            extension =
+                target.extensions.create(
+                    "artifactRegistry",
+                    ArtifactRegistryGradleExtension::class.java,
+                    objectFactory,
+                )
 
-                is Gradle -> {
-                    target.rootProject.providers
-                }
-
-                is Settings -> {
-                    target.providers
-                }
-
-                else -> {
-                    logger.info(
-                        "Failed to get access token from gcloud or Application Default Credentials due to unknown script type $target",
+            val artifactRegistryPasswordCredentialsSupplier =
+                ArtifactRegistryPasswordCredentialsSupplier().apply {
+                    addSupplier(
+                        extension.gCloudSDKExtension.enable,
+                        extension.gCloudSDKExtension.order,
+                        GCloudSDK(providerFactory),
                     )
-                    return
+
+                    addSupplier(
+                        extension.applicationDefaultExtension.enable,
+                        extension.applicationDefaultExtension.order,
+                        ApplicationDefault(providerFactory),
+                    )
+                }
+
+            when (target) {
+                is Project -> target.applyPlugin(artifactRegistryPasswordCredentialsSupplier)
+                is Gradle -> target.applyPlugin(artifactRegistryPasswordCredentialsSupplier)
+                is Settings -> target.applyPlugin(artifactRegistryPasswordCredentialsSupplier)
+            }
+        }
+
+        private fun Settings.applyPlugin(passwordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier) {
+            gradle.applyPlugin(passwordCredentialsSupplier)
+        }
+
+        private fun Gradle.applyPlugin(passwordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier) {
+            with(RepositoryConfigurer) {
+                configureRepositories(passwordCredentialsSupplier)
+            }
+        }
+
+        private fun Project.applyPlugin(passwordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier) {
+            with(RepositoryConfigurer) {
+                afterEvaluate {
+                    configureRepositories(passwordCredentialsSupplier)
                 }
             }
-
-        val credentials = artifactRegistryPasswordCredentialsSupplier.get()
-
-        when (target) {
-            is Settings -> target.applyPlugin(credentials)
-            is Gradle -> target.applyPlugin(credentials)
-            is Project -> target.applyPlugin(credentials)
         }
     }
-
-    private fun Settings.applyPlugin(passwordCredentials: PasswordCredentials?) {
-        gradle.applyPlugin(passwordCredentials)
-    }
-
-    private fun Gradle.applyPlugin(passwordCredentials: PasswordCredentials?) {
-        with(RepositoryConfigurer) {
-            configureRepositories(passwordCredentials)
-        }
-    }
-
-    private fun Project.applyPlugin(passwordCredentials: PasswordCredentials?) {
-        with(RepositoryConfigurer) {
-            afterEvaluate {
-                configureRepositories(passwordCredentials)
-            }
-        }
-    }
-
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(ArtifactRegistryGradlePlugin::class.java)
-    }
-}

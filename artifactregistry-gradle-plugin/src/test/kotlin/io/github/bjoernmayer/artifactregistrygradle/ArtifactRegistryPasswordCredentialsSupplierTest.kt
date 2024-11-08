@@ -2,7 +2,6 @@ package io.github.bjoernmayer.artifactregistrygradle
 
 import com.google.auth.oauth2.AccessToken
 import com.google.auth.oauth2.GoogleCredentials
-import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,22 +22,48 @@ class ArtifactRegistryPasswordCredentialsSupplierTest {
         val tokenValue = "thisIsSomeSuperSpecialToken"
         val secondSupplier =
             Supplier {
-                GoogleCredentials.newBuilder().apply {
-                    accessToken =
-                        AccessToken(
-                            tokenValue,
-                            Date.from(LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC)),
-                        )
-                }.build()
+                GoogleCredentials
+                    .newBuilder()
+                    .apply {
+                        accessToken =
+                            AccessToken(
+                                tokenValue,
+                                Date.from(
+                                    LocalDate
+                                        .now()
+                                        .plusDays(1)
+                                        .atStartOfDay()
+                                        .toInstant(ZoneOffset.UTC),
+                                ),
+                            )
+                    }.build()
             }
 
         val instance =
-            ArtifactRegistryPasswordCredentialsSupplier(
-                listOf(
-                    firstSupplier,
-                    secondSupplier,
-                ),
-            )
+            ArtifactRegistryPasswordCredentialsSupplier().apply {
+                addSupplier(
+                    enabled =
+                        mockk {
+                            every { get() } returns true
+                        },
+                    order =
+                        mockk {
+                            every { get() } returns 1
+                        },
+                    supplier = firstSupplier,
+                )
+                addSupplier(
+                    enabled =
+                        mockk {
+                            every { get() } returns true
+                        },
+                    order =
+                        mockk {
+                            every { get() } returns 2
+                        },
+                    supplier = secondSupplier,
+                )
+            }
 
         val result = instance.get()
 
@@ -52,13 +77,21 @@ class ArtifactRegistryPasswordCredentialsSupplierTest {
         val tokenValue = "thisIsSomeSuperSpecialToken"
         val firstSupplier =
             Supplier {
-                GoogleCredentials.newBuilder().apply {
-                    accessToken =
-                        AccessToken(
-                            tokenValue,
-                            Date.from(LocalDate.now().plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC)),
-                        )
-                }.build()
+                GoogleCredentials
+                    .newBuilder()
+                    .apply {
+                        accessToken =
+                            AccessToken(
+                                tokenValue,
+                                Date.from(
+                                    LocalDate
+                                        .now()
+                                        .plusDays(1)
+                                        .atStartOfDay()
+                                        .toInstant(ZoneOffset.UTC),
+                                ),
+                            )
+                    }.build()
             }
         val secondSupplier: Supplier<GoogleCredentials?> =
             mockk {
@@ -66,16 +99,32 @@ class ArtifactRegistryPasswordCredentialsSupplierTest {
             }
 
         val instance =
-            ArtifactRegistryPasswordCredentialsSupplier(
-                listOf(
-                    firstSupplier,
-                    secondSupplier,
-                ),
-            )
+            ArtifactRegistryPasswordCredentialsSupplier().apply {
+                addSupplier(
+                    enabled =
+                        mockk {
+                            every { get() } returns true
+                        },
+                    order =
+                        mockk {
+                            every { get() } returns 1
+                        },
+                    supplier = firstSupplier,
+                )
+                addSupplier(
+                    enabled =
+                        mockk {
+                            every { get() } returns true
+                        },
+                    order =
+                        mockk {
+                            every { get() } returns 2
+                        },
+                    supplier = secondSupplier,
+                )
+            }
 
         val result = instance.get()
-
-        verify { secondSupplier wasNot called }
 
         assertEquals(tokenValue, result!!.password)
     }

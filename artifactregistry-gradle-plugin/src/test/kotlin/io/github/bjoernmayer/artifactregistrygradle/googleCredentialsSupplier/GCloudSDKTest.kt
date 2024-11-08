@@ -18,6 +18,15 @@ class GCloudSDKTest {
                 every {
                     exec(any())
                 } throws ExecException("A problem occurred starting process 'command 'gcloud'")
+
+                every {
+                    systemProperty("os.name")
+                } returns
+                    mockk {
+                        every {
+                            orNull
+                        } returns "TempleOS"
+                    }
             }
 
         assertEquals(null, GCloudSDK(providerFactory).get())
@@ -57,6 +66,15 @@ class GCloudSDKTest {
 
                         override fun getStandardError(): ExecOutput.StandardStreamContent = mockk {}
                     }
+
+                every {
+                    systemProperty("os.name")
+                } returns
+                    mockk {
+                        every {
+                            orNull
+                        } returns "TempleOS"
+                    }
             }
 
         assertEquals(null, GCloudSDK(providerFactory).get())
@@ -95,6 +113,15 @@ class GCloudSDKTest {
                             }
 
                         override fun getStandardError(): ExecOutput.StandardStreamContent = mockk {}
+                    }
+
+                every {
+                    systemProperty("os.name")
+                } returns
+                    mockk {
+                        every {
+                            orNull
+                        } returns "TempleOS"
                     }
             }
 
