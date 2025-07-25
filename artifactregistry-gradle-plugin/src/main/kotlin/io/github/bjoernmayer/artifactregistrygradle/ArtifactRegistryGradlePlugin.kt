@@ -49,6 +49,10 @@ public class ArtifactRegistryGradlePlugin
         }
 
         private fun Settings.applyPlugin(passwordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier) {
+            with(RepositoryConfigurer) {
+                configureRepositories(passwordCredentialsSupplier)
+            }
+
             gradle.applyPlugin(passwordCredentialsSupplier)
         }
 

@@ -48,8 +48,12 @@ internal object RepositoryConfigurer {
         }
     }
 
-    private fun Settings.configureRepositories(passwordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier) {
+    fun Settings.configureRepositories(passwordCredentialsSupplier: ArtifactRegistryPasswordCredentialsSupplier) {
         pluginManagement.repositories.forEach {
+            it.configure(passwordCredentialsSupplier)
+        }
+
+        dependencyResolutionManagement.repositories.forEach {
             it.configure(passwordCredentialsSupplier)
         }
     }
